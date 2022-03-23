@@ -1,35 +1,35 @@
 const cluster =  require('cluster');
+const express = require('express');
+const Worker = require('webworker-threads').worker
 
-
-
-// check if index.js is the first node instance(the master/ the cluster manager)
-if(cluster.isMaster){
-    // if index.js it the manager then fork(create node instance/child) 
-    console.log(cluster.isMaster)
-
-   cluster.fork()
-}else{
-     
-    // start execute the app if its a  child node instance
-    console.log(cluster.isMaster)
-    const express = require('express');
-
-    
 const app  =express();
 
 
-function doWork(duration){
-    const start = Date.now();
 
-    while(Date.now()-start < duration){}
-}
 
 app.get('/',(req,res)=>{
-    doWork(4000)
-    res.send('Hi there');
+    const worker = new Worker(function(){
+        // this is the object the the function property of
+        this.onmessage = function(){
+            //do some stuff
+             let counter =0;
+             while(counter<1e9){counter++} 
+            // return back counter value after finishing            
+             postMessage(counter)
+        }
+    })
+    
+    
+    worker.postMessage()
+
+    worker.onmessage=function(payload){
+ 
+        res.send(''+payload.data)
+    }
+    
+   
 })
 
 app.listen(3000, ()=>console.log('server up '))
 
 
-}
