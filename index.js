@@ -2,8 +2,9 @@ const cluster =  require('cluster');
 const express = require('express');
 const Worker = require('webworker-threads').worker
 
-const app  =express();
 
+
+const app  =express();
 
 
 
@@ -30,6 +31,6 @@ app.get('/',(req,res)=>{
    
 })
 
-app.listen(3000, ()=>console.log('server up '))
+app.listen(3001, ()=>console.log('server up '))
 
 

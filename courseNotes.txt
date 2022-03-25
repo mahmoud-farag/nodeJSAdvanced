@@ -1,0 +1,27 @@
+// key words and general concepts
+1. clustering
+2. worker threads.
+3. nodejs not a single thread, it depends on thread pool provided by libuv.  the event loop is actually a single thread to handle async processes
+4. any network requsets handled by os not nodejs 
+5. $redis=> caching server to reduce  data retriving from the db.
+   $ steps to create redis server:
+        1. const redis = require('redis');
+        2. const redisurl= 'redis://127.0.0.1:6379';
+        3. const client = redis.createClient(redisurl);
+        4.  setting item => client.set(key, value).  value must be a string not an object
+        5.  getting value => client.get(key, callback)   hint: it is not return a promise
+            so you can use util.promisify()  as a wrapper to return a promise.
+        6. nestted setting => client.hset(key,key,value);
+        7. nestted getting => client.hget(key,key,callback)
+        8. remove all cached data => client.flushall().
+        9. setting expiration period==>  client.set(key, value,'EX', n(seconds))
+
+6. (VIMP) const util=require('util')=>> noejs built-in module providing some utility functions  
+   one of these function is util.promisify()==> a function that accepts any function that take a callback function as an 
+   argument which basically not return a promise and make it return a promise 
+
+7. (VIMP) design pattern tip, any custom function you need to create .... try to put it into the prototype of the
+   constructor function    
+
+
+8.  Array.isArray(value)==> checking value array or not
